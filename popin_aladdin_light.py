@@ -78,7 +78,7 @@ def ping_cealing(host):
 
 
 def light(host, button):
-    return _send_tcp(host, _pack(1, 7, {'action': _buttons[button]}))
+    return _send_tcp(host, _pack(1, 7, {'action': _cealing_buttons[button]}))
 
 
 def text(host, text):
