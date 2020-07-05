@@ -1,6 +1,6 @@
 # popin-aladdin-light
 
-CLI to control popIn Aladdin 2 ceiling light
+CLI to control popIn Aladdin 2 ceiling light and projector
 
 ## Examples
 
