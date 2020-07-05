@@ -68,7 +68,7 @@ def _send_tcp(host, data, null_reply=False, port=30913):
 def _send_udp(host, data, port=16735):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
-        sock.sendto(data, (host, port))
+        sock.sendto(data.encode('ascii'), (host, port))
     finally:
         sock.close()
 
@@ -115,8 +115,8 @@ def main(argv):
     parser.add_argument('--host', type=str, required=True)
     parser.add_argument('--ping', default=False, action='store_true')
     parser.add_argument('--projector', type=str, default=None,
-                        choices=(_projector_buttons.keys() +
-                                 _projector_stateless_buttons.keys()))
+                        choices=(list(_projector_buttons.keys()) +
+                                 list(_projector_stateless_buttons.keys())))
     parser.add_argument('--light', type=str, default=None,
                         choices=_cealing_buttons.keys())
     parser.add_argument('--text', type=str, default=None)
