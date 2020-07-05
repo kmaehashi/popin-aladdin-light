@@ -33,12 +33,12 @@ def _pack(op1, op2, payload_obj):
     return header + payload
 
 
-def _send(host, port, data, reply=False):
+def _send(host, port, data, null_reply=False):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         sock.connect((host, port))
         sock.sendall(data)
-        if reply:
+        if null_reply:
             header = sock.recv(6)
             payload_len, op1, op2 = struct.unpack(_header_format, header)
             assert payload_len == 0
