@@ -56,6 +56,10 @@ def light(host, port, button):
     return _send(host, port, _pack(1, 7, {'action': _buttons[button]}))
 
 
+def text(host, port, text):
+    return _send(host, port, _pack(1, 10, {'text': text}))
+
+
 def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--host', type=str, required=True)
@@ -63,6 +67,7 @@ def main(argv):
     parser.add_argument('--ping', default=False, action='store_true')
     parser.add_argument('--light', type=str, default=None,
                         choices=_buttons.keys())
+    parser.add_argument('--text', type=str, default=None)
     parser.add_argument('--repeat', type=int, default=1)
     args = parser.parse_args(argv)
 
@@ -71,6 +76,8 @@ def main(argv):
             ping(args.host, args.port)
         if args.light:
             light(args.host, args.port, args.light)
+        if args.text:
+            text(args.host, args.port, args.text)
         time.sleep(0.1)
 
 
