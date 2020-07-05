@@ -110,6 +110,39 @@ def projector(host, button, duration=0.1):
         assert False
 
 
+def action(host, action, data):
+    payload = {
+        'version' : '2.4.26',
+        'appid' : '1482854652',
+        'packageName' : 'cc.popIn.aladdin',
+        'msgid' : '0',  # TODO use unixtime?
+        'action' : action,
+    }
+
+
+def control_command(host, mode, type, time):
+    data = {
+        'controlCmd' : {
+            'mode' : mode,
+            'type' : type,
+            'time' : time,
+        }
+    },
+    action(host, 20000, data)
+
+
+def capture(host):
+    control_command(host, 9, 1, 0)
+
+
+def free_memory(host):
+    control_command(host, 9, 2, 0)
+
+
+def ping_udp(host):
+    action(host, 10002)
+
+
 def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--host', type=str, required=True)
