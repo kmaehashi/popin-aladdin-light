@@ -73,7 +73,7 @@ def _send_udp(host, data, port=16735):
         sock.close()
 
 
-def ping_cealing(host):
+def ping_tcp(host):
     return _send_tcp(host, _pack(0, 0, 1), True)
 
 
@@ -86,7 +86,7 @@ def text(host, text):
 
 
 def voice_control(host, text):
-    return _send_tcp(host, _pack(1, 9, {'text': text, 'success': true}))
+    return _send_tcp(host, _pack(1, 9, {'text': text, 'success': True}))
 
 
 def _projector_set_key_status(host, key, state):
@@ -118,6 +118,9 @@ def action(host, action, data):
         'msgid' : '0',  # TODO use unixtime?
         'action' : action,
     }
+    payload.update(data)
+    _send_udp(host, json.dumps(payload))
+    # TODO listen for reply
 
 
 def control_command(host, mode, type, time):
@@ -140,7 +143,7 @@ def free_memory(host):
 
 
 def ping_udp(host):
-    action(host, 10002)
+    action(host, 10002, {})
 
 
 def main(argv):
@@ -153,16 +156,20 @@ def main(argv):
     parser.add_argument('--light', type=str, default=None,
                         choices=_cealing_buttons.keys())
     parser.add_argument('--text', type=str, default=None)
+    parser.add_argument('--voice-control', type=str, default=None)
     parser.add_argument('--repeat', type=int, default=1)
     args = parser.parse_args(argv)
 
     for i in range(args.repeat):
         if args.ping:
-            ping(args.host)
+            ping_tcp(args.host)
+            ping_udp(args.host)
         if args.light:
             light(args.host, args.light)
         if args.projector:
             projector(args.host, args.projector)
+        if args.voice_control:
+            voice_control(args.host, args.voice_control)
         if args.text:
             text(args.host, args.text)
 
